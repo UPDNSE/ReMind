@@ -50,5 +50,19 @@ public class AddReminder extends AppCompatActivity {
             time_picker.show();}
         }
         });
+        time_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    Calendar sched = Calendar.getInstance();
+                    final TimePickerDialog time_picker = new TimePickerDialog(time_text.getContext(), new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+                            time_text.setText(hourOfDay+":"+minute);
+                        }
+                    }, sched.get(Calendar.HOUR_OF_DAY), sched.get(Calendar.MINUTE), false);
+                    time_picker.show();
+            }
+        });
     }
 }
