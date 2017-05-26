@@ -30,22 +30,22 @@ import com.wynfa.remind.db.ReminderDBHelper;
 
 import java.util.Calendar;
 
-public class AddReminder extends AppCompatActivity {
+public class ViewReminder extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_reminder);
+        setContentView(R.layout.activity_view_reminder);
+
+        TimePicker reminder_timeedit = (TimePicker) findViewById(R.id.reminder_timeedit);
 
 
-
-        FloatingActionButton added_button = (FloatingActionButton) findViewById(R.id.added_button);
-        added_button.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton edited_button = (FloatingActionButton) findViewById(R.id.edited_button);
+        edited_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // lots of things go here
                 Calendar now = Calendar.getInstance();
-
                 TimePicker reminder_timepicker = (TimePicker) findViewById(R.id.reminder_timepicker);
                 EditText reminder_labelpicker = (EditText) findViewById(R.id.reminder_labelpicker);
 
