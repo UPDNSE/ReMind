@@ -1,26 +1,14 @@
 package com.wynfa.remind;
 
-import android.app.DatePickerDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Rect;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.NotificationCompat;
-import android.support.v7.widget.Toolbar;
-import android.text.InputType;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -37,30 +25,38 @@ public class AddReminder extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_reminder);
 
-
-
+        // Button to confirm adding the reminder.
         FloatingActionButton added_button = (FloatingActionButton) findViewById(R.id.added_button);
         added_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // lots of things go here
+
+                // Get the current time as now.
                 Calendar now = Calendar.getInstance();
 
-                TimePicker reminder_timepicker = (TimePicker) findViewById(R.id.reminder_timepicker);
-                EditText reminder_labelpicker = (EditText) findViewById(R.id.reminder_labelpicker);
+                // Get the time and label inputted by the user.
+                TimePicker reminder_time_picker = (TimePicker) findViewById(R.id.reminder_time_picker);
+                EditText reminder_label_picker = (EditText) findViewById(R.id.reminder_label_picker);
 
-                if (reminder_labelpicker.getText().toString().isEmpty()) {
-                    Toast label_error = Toast.makeText(getApplicationContext(),"Your reminder has no label!",Toast.LENGTH_SHORT);
+                // Error if user did not input a label.
+                if (reminder_label_picker.getText().toString().isEmpty()) {
+                    Toast label_error = Toast.makeText(getApplicationContext(),getResources().getString(R.string.label_error_message),Toast.LENGTH_SHORT);
                     label_error.show();
                 }
-                else {
-                    Reminder new_reminder = new Reminder();
-                    new_reminder.hour = reminder_timepicker.getHour();
-                    new_reminder.minute = reminder_timepicker.getMinute();
-                    new_reminder.label = reminder_labelpicker.getText().toString();
 
-                    ReminderDBHelper dbhelper = ReminderDBHelper.getInstance(getApplicationContext());
-                    dbhelper.addReminder(new_reminder);
+                // Save a new reminder to the database and return to the MainActivity.
+                else {
+                    // Create a new Reminder instance with the current time and label input.
+                    Reminder new_reminder = new Reminder();
+                    new_reminder.setHour(reminder_time_picker.getHour());
+                    new_reminder.setMinute(reminder_time_picker.getMinute());
+                    new_reminder.setLabel(reminder_label_picker.getText().toString());
+                    new_reminder.setState(false);
+
+                    // Add the Reminder instance to the database and return to the MainActivity.
+                    ReminderDBHelper db_helper = ReminderDBHelper.getInstance(getApplicationContext());
+                    db_helper.addReminder(new_reminder);
+                    db_helper.close();
                     startActivity(new Intent(view.getContext(), MainActivity.class));
                 }
             }
@@ -69,6 +65,7 @@ public class AddReminder extends AppCompatActivity {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
+        // Correct focus when touching the screen outside of the Reminder label picker.
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             View v = getCurrentFocus();
             if ( v instanceof EditText) {

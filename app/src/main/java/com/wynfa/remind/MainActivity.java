@@ -2,25 +2,18 @@ package com.wynfa.remind;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Telephony;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.wynfa.remind.db.Reminder;
 import com.wynfa.remind.db.ReminderAdapter;
 import com.wynfa.remind.db.ReminderDBHelper;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,16 +24,18 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Get an ArrayList of the reminders from the database.
+        ReminderDBHelper db_helper = ReminderDBHelper.getInstance(getApplicationContext());
+        ArrayList<Reminder> reminder_list = db_helper.getAllReminders();
+        db_helper.close();
 
-        ReminderDBHelper dbhelper = ReminderDBHelper.getInstance(getApplicationContext());
-        ArrayList<Reminder> reminderList = dbhelper.getAllReminders();
-        dbhelper.close();
-
-        ReminderAdapter adapter = new ReminderAdapter(this,reminderList);
-
+        // Set the array list to a ListView using a ReminderAdapter.
+        ReminderAdapter reminder_adapter = new ReminderAdapter(this,reminder_list);
         ListView listView = (ListView) findViewById(R.id.reminder_list);
-        listView.setAdapter(adapter);
+        listView.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
+        listView.setAdapter(reminder_adapter);
 
+        // Add button directs to the AddReminder activity on click.
         FloatingActionButton add_button = (FloatingActionButton) findViewById(R.id.add_button);
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,20 +47,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
+        // Create two options: Help and About.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_help) {
             return true;
         }
         if (id == R.id.action_about) {

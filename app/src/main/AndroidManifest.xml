@@ -4,11 +4,13 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/test_icon"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/BlueGrayAmberTheme">
+
+        // MainActivity
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -20,18 +22,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        // AddReminder
         <activity
             android:name=".AddReminder"
-            android:label="Create Reminder"
+            android:label="@string/add_name"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
 
-        <service android:name=".AlarmReceiver" />
-
-        <activity android:name=".ViewReminder"
-            android:label="Edit Reminder"
-            android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait" />
+        // AlarmReceiver
     </application>
 
 </manifest>

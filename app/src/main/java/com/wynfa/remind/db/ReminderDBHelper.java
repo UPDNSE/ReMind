@@ -8,13 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static android.content.ContentValues.TAG;
-
-/**
- * Created by RafaelLuis on 5/17/2017.
- */
 
 public class ReminderDBHelper extends SQLiteOpenHelper {
 
@@ -70,14 +65,11 @@ public class ReminderDBHelper extends SQLiteOpenHelper {
     }
 
     public void addReminder (Reminder reminder) {
-        // Create and/or open the database for writing
+
         SQLiteDatabase db = getWritableDatabase();
 
-        // It's a good idea to wrap our insert in a transaction. This helps with performance and ensures
-        // consistency of the database.
         db.beginTransaction();
         try {
-            // The user might already exist in the database (i.e. the same user created multiple posts).
 
             ContentValues values = new ContentValues();
             values.put(KEY_REMINDER_HOUR, reminder.hour);
@@ -85,7 +77,6 @@ public class ReminderDBHelper extends SQLiteOpenHelper {
             values.put(KEY_REMINDER_LABEL, reminder.label);
             values.put(KEY_REMINDER_STATE, Boolean.FALSE);
 
-            // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
             db.insertOrThrow(TABLE_REMINDERS, null, values);
             db.setTransactionSuccessful();
         } catch (Exception e) {
