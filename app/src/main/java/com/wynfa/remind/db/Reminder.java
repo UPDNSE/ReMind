@@ -24,7 +24,7 @@ public class Reminder {
     }
 
     public int getMinute() {
-        return minute;
+        return this.minute;
     }
 
     public void setMinute(int minute) {
@@ -32,7 +32,7 @@ public class Reminder {
     }
 
     public String getLabel() {
-        return label;
+        return this.label;
     }
 
     public void setLabel(String label) {
@@ -40,7 +40,7 @@ public class Reminder {
     }
 
     public boolean isState() {
-        return state;
+        return this.state;
     }
 
     public void setState(boolean state) {

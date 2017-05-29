@@ -8,7 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.wynfa.remind.db.Reminder;
 import com.wynfa.remind.db.ReminderAdapter;
@@ -30,10 +32,28 @@ public class MainActivity extends AppCompatActivity {
         db_helper.close();
 
         // Set the array list to a ListView using a ReminderAdapter.
-        ReminderAdapter reminder_adapter = new ReminderAdapter(this,reminder_list);
+        final ReminderAdapter reminder_adapter = new ReminderAdapter(this,reminder_list);
         ListView listView = (ListView) findViewById(R.id.reminder_list);
-        listView.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
         listView.setAdapter(reminder_adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> adapter,View v, int position,long id){
+
+                Object item = adapter.getItemAtPosition(position);
+                Intent intent = new Intent(getApplicationContext(),ViewReminder.class);
+
+                TextView time = (TextView) v.findViewById(R.id.time);
+                TextView label = (TextView) v.findViewById(R.id.label);
+                intent.putExtra("time_text",time.getText());
+                intent.putExtra("label",label.getText());
+
+                Reminder reminder = (Reminder) item;
+                intent.putExtra("id",reminder.getId());
+
+                startActivity(intent);
+            }
+        });
 
         // Add button directs to the AddReminder activity on click.
         FloatingActionButton add_button = (FloatingActionButton) findViewById(R.id.add_button);
@@ -51,12 +71,17 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         // Create two options: Help and About.
         int id = item.getItemId();
 
+        if (id == R.id.action_connect) {
+            return true;
+        }
         if (id == R.id.action_help) {
             return true;
         }

@@ -132,12 +132,12 @@ public class ReminderDBHelper extends SQLiteOpenHelper {
                 new String[] { String.valueOf(reminder.id) });
     }
 
-    public void deleteReminder(Reminder reminder) {
+    public void deleteReminder(int id) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
             db.delete(TABLE_REMINDERS, KEY_REMINDER_ID + " = ?",
-                    new String[]{String.valueOf(reminder.id)});
+                    new String[]{String.valueOf(id)});
 
             db.setTransactionSuccessful();
         } catch (Exception e) {
